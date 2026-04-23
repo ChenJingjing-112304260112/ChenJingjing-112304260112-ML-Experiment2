@@ -6,4 +6,3 @@ word2vec_model.model
 test_word2vec.model
 train_vectors.npy
 test_vectors.npy
-submission.csv

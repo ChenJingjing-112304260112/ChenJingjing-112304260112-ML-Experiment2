@@ -1,32 +1,32 @@
 $projectPath = "c:\Users\51273\Desktop\机器学习2"
 $lastCheck = Get-Date
 
-Write-Host "开始监控文件变化，每30秒检查一次..."
-Write-Host "按 Ctrl+C 停止监控"
+Write-Host "Start monitoring file changes, checking every 30 seconds..."
+Write-Host "Press Ctrl+C to stop monitoring"
 
 while ($true) {
-    # 检查文件变化
+    # Check for file changes
     $changedFiles = Get-ChildItem -Path $projectPath -Recurse | Where-Object {
         $_.LastWriteTime -gt $lastCheck -and $_.Name -notlike "*.git*"
     }
     
     if ($changedFiles.Count -gt 0) {
-        Write-Host "检测到文件变化，更新GitHub..."
+        Write-Host "Detected file changes, updating GitHub..."
         Set-Location -Path $projectPath
         
-        # 执行Git命令
+        # Execute Git commands
         try {
             git add .
             git commit -m "auto-update: $(Get-Date)"
             git push
             
             $lastCheck = Get-Date
-            Write-Host "更新完成！"
+            Write-Host "Update completed!"
         } catch {
-            Write-Host "更新失败: $_"
+            Write-Host "Update failed: $_"
         }
     }
     
-    # 每30秒检查一次
+    # Check every 30 seconds
     Start-Sleep -Seconds 30
 }
